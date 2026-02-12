@@ -26,10 +26,10 @@ def chunk_text(text):
 
 def ingest_all_docs(force_recreate=False):
     """
-    Config dosyasındaki TÜM belgeleri sırayla işler ve veritabanına yükler.
+    Config dosyasındaki tüm belgeleri sırayla işler ve veritabanına yükler.
     
     Bu fonksiyon bir nevi "Kütüphaneci" gibidir:
-    1. Rafları (Koleksiyonları) kontrol eder.
+    1. Koleksiyonları kontrol eder.
     2. Eksik kitap varsa PDF'i okur.
     3. Sayfaları parçalar ve rafa yerleştirir.
     """
@@ -54,7 +54,7 @@ def ingest_all_docs(force_recreate=False):
             embedding_function=embedding_fn
         )
 
-        # 3. KONTROL: Veri zaten var mı? Varsa tekrar yükleme yapma (Zaman kaybı önlenir)
+        # 3. KONTROL: Veri zaten var mı? Varsa tekrar yükleme yapma 
         if collection.count() == 0 or force_recreate:
             raw_text = load_pdf(pdf_path)
             

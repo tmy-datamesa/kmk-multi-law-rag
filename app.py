@@ -14,8 +14,9 @@ st.caption("KMK • TBK • TMK • Yönetmelikler")
 if "agent_system" not in st.session_state:
     with st.spinner("Sistem kuruluyor..."):
         try:
-            # Otomatik Ingestion (Eksik veri varsa tamamlar)
-            ingest_all_docs(force_recreate=False)
+            # Veritabanı Ortak Kullanılıyor
+            # Eğer admin yeni veri ekleyecekse terminalden "make ingest" çalıştırır.
+            # ingest_all_docs(force_recreate=False)
             
             # Ajanı Başlat
             st.session_state.agent_system = LegalAgent()
@@ -26,6 +27,7 @@ if "agent_system" not in st.session_state:
         except Exception as e:
             st.error(f"Sistem hatası: {e}")
             st.stop()
+
 
 # --- 2. SOHBET ARAYÜZÜ ---
 if "messages" not in st.session_state:
