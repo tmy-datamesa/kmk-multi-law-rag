@@ -14,11 +14,14 @@ Bu proje, tek bir kanun yerine **birden fazla hukuk kaynağını (KMK, TBK, Anay
 ## 📂 Mimari (Agentic RAG)
 
 Sistem **"OpenAI Tools"** teknolojisini kullanarak çalışır:
-1.  **Agent (Beyin)**: Kullanıcı sorusunu analiz eder.
-2.  **Tools (Alet Çantası)**:
+1.  **Agent**: Kullanıcı sorusunu analiz eder.
+2.  **Tools**:
     *   `search_kmk()`: Kat Mülkiyeti Kanunu (Ana Kaynak).
-    *   `search_tbk()`: Türk Borçlar Kanunu'nun **sadece kira ve komşuluk ilişkileri** ile ilgili maddeleri.
-    *   `search_anayasa()`: Anayasa'nın **mülkiyet ve konut dokunulmazlığı** ile ilgili maddeleri.
+    *   `search_tbk()`: Türk Borçlar Kanunu (Kira/Komşuluk).
+    *   `search_tmk()`: Türk Medeni Kanunu (Mülkiyet/Komşuluk Hakları).
+    *   `search_asansor()`: Asansör Bakım Yönetmeliği.
+    *   `search_yangin()`: Yangın Koruma Yönetmeliği.
+    *   `search_anayasa()`: Anayasa (Haklar).
 3.  **RAG Engine**: Seçilen alet çalışır, veritabanından bilgi çeker ve ajana verir.
 
 

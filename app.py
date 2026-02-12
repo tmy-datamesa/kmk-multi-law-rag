@@ -7,7 +7,8 @@ import os
 # Sayfa Ayarları
 st.set_page_config(page_title="Multi-Law Legal Agent", page_icon="⚖️", layout="centered")
 st.title("Komşuluk & Apartman Hukuku Asistanı")
-st.caption("Kat Mülkiyeti • Borçlar Kanunu • Anayasa")
+st.caption("KMK • TBK • TMK • Yönetmelikler")
+
 
 # --- 1. SİSTEM BAŞLATMA ---
 if "agent_system" not in st.session_state:

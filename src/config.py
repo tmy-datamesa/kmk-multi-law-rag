@@ -41,12 +41,30 @@ LEGAL_DOCS = {
         "description": "Konut dokunulmazlığı, mülkiyet hakkı ve özel hayatın gizliliği (Komşuluk bağlamında).",
         "path": os.path.join(DATA_DIR, "anayasa.pdf"),
         "collection": "law_anayasa"
+    },
+    "tmk": {
+        "name": "Türk Medeni Kanunu (İlgili Maddeler)",
+        "description": "Komşuluk hakları, mülkiyet kısıtlamaları, taşkınlık ve irtifak hakları.",
+        "path": os.path.join(DATA_DIR, "medeni_kanun.pdf"),
+        "collection": "law_tmk"
+    },
+    "asansor": {
+        "name": "Asansör İşletme ve Bakım Yönetmeliği",
+        "description": "Asansörlerin bakımı, yıllık kontrolleri, kırmızı etiket, mühürleme ve yönetici sorumlulukları.",
+        "path": os.path.join(DATA_DIR, "asansor_yonetmeligi.pdf"),
+        "collection": "reg_asansor"
+    },
+    "yangin": {
+        "name": "Binaların Yangından Korunması Yönetmeliği",
+        "description": "Yangın merdiveni, yangın tüpleri, kaçış yolları ve binadaki teknik yangın güvenlik önlemleri.",
+        "path": os.path.join(DATA_DIR, "yangin_yonetmeligi.pdf"),
+        "collection": "reg_yangin"
     }
 }
 
 
+
 # RAG Parametreleri (Varsayılan)
-# Her doküman için özel ayar yapılmazsa bunlar geçerli olur.
 CHUNK_SIZE = 2000      # v2 ile aynı tutuldu
 CHUNK_OVERLAP = 400    # v2 ile aynı tutuldu
 TOP_K = 4
