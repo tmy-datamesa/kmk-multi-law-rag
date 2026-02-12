@@ -44,14 +44,3 @@ make ingest
 make run
 ```
 
-## 📚 Yeni Kanun Nasıl Eklenir?
-Sadece `src/config.py` dosyasına yeni bir blok eklemeniz yeterlidir:
-```python
-"ticaret_kanunu": {
-    "name": "Türk Ticaret Kanunu",
-    "description": "Şirketler ve ticari işler için...",
-    "path": "data/ttk.pdf",
-    "collection": "law_ttk"
-}
-```
-Sistem otomatik olarak bunu tanır ve Ajanın yeteneklerine ekler.
