@@ -16,10 +16,11 @@ Bu proje, tek bir kanun yerine **birden fazla hukuk kaynağını (KMK, TBK, Anay
 Sistem **"OpenAI Tools"** teknolojisini kullanarak çalışır:
 1.  **Agent (Beyin)**: Kullanıcı sorusunu analiz eder.
 2.  **Tools (Alet Çantası)**:
-    *   `search_kmk()`: Site ve apartman işleri için.
-    *   `search_tbk()`: Borç ve kira işleri için.
-    *   `search_anayasa()`: Hak ve özgürlükler için.
+    *   `search_kmk()`: Kat Mülkiyeti Kanunu (Ana Kaynak).
+    *   `search_tbk()`: Türk Borçlar Kanunu'nun **sadece kira ve komşuluk ilişkileri** ile ilgili maddeleri.
+    *   `search_anayasa()`: Anayasa'nın **mülkiyet ve konut dokunulmazlığı** ile ilgili maddeleri.
 3.  **RAG Engine**: Seçilen alet çalışır, veritabanından bilgi çeker ve ajana verir.
+
 
 ## 🛠️ Kurulum
 

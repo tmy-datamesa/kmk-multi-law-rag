@@ -31,18 +31,19 @@ LEGAL_DOCS = {
         "collection": "law_kmk"
     },
     "tbk": {
-        "name": "Türk Borçlar Kanunu",
-        "description": "Kira sözleşmeleri, borç ilişkileri, alacak-verecek davaları, tazminat ve sözleşme hukuku.",
+        "name": "Türk Borçlar Kanunu (İlgili Maddeler)",
+        "description": "Sadece kira sözleşmeleri, kiracı-ev sahibi ilişkileri ve komşuluktan doğan zararlar.",
         "path": os.path.join(DATA_DIR, "borclar-kanunu.pdf"), # Dosya yoksa ingest sırasında uyarır
         "collection": "law_tbk"
     },
     "anayasa": {
-        "name": "T.C. Anayasası",
-        "description": "Temel hak ve özgürlükler, devletin yapısı, vatandaşlık hakları ve anayasal düzen.",
+        "name": "T.C. Anayasası (İlgili Maddeler)",
+        "description": "Konut dokunulmazlığı, mülkiyet hakkı ve özel hayatın gizliliği (Komşuluk bağlamında).",
         "path": os.path.join(DATA_DIR, "anayasa.pdf"),
         "collection": "law_anayasa"
     }
 }
+
 
 # RAG Parametreleri (Varsayılan)
 # Her doküman için özel ayar yapılmazsa bunlar geçerli olur.
