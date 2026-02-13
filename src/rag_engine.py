@@ -28,14 +28,25 @@ class LegalRAGTool:
             query_texts=[query],
             n_results=config.TOP_K
         )
-        # Eğer sonuç varsa ilk listeyi dön, yoksa boş liste dön
-        return results['documents'][0] if results['documents'] else []
+        
+        # Sonuçları işle ve yapılandır
+        structured_results = []
+        if results['documents'] and results['documents'][0]:
+            docs = results['documents'][0]
+            metas = results['metadatas'][0] if results['metadatas'] else [{}] * len(docs)
+            
+            for doc, meta in zip(docs, metas):
+                structured_results.append({
+                    "content": doc,
+                    "metadata": meta
+                })
+                
+        return structured_results
 
     def get_context(self, query):
         """
-        LLM için hazırlık: Bulunan maddeleri alt alta birleştirip tek bir metin yapar.
+        LLM için hazırlık: Bulunan maddeleri ve metadataları döner.
         """
-        docs = self.retrieve(query)
-        return "\n\n---\n\n".join(docs) if docs else None
+        return self.retrieve(query)
 
 
