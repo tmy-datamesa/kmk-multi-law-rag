@@ -1,8 +1,8 @@
-# 🤖 Multi-Law Agentic RAG (V3)
+# 🤖 Multi-Law Agentic RAG (V2)
 
 Bu proje, tek bir kanun yerine **birden fazla hukuk kaynağını (KMK, TBK, Anayasa vb.)** yönetebilen, "Ajan (Agent)" tabanlı bir yapay zeka sistemidir.
 
-## 🌟 Nedir Farkı? (V2 vs V3)
+## 🌟 Nedir Farkı? (V1 vs V2)
 
 *   **V2 (Eski):** Sadece Kat Mülkiyeti Kanunu'nu bilen, "tek fonksiyonlu" bir araçtı.
 *   **V3 (Yeni):** Akıllı bir **Yönlendirici (Router)** içerir. Sorunuza bakar, hangi kanunun uzmanlık alanına girdiğine karar verir ve o kanunu açıp okur.
