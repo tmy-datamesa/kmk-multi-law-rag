@@ -23,6 +23,7 @@ class LegalRAG:
             self.tools_map[key] = LegalRAGTool(info["collection"], self.chroma_client)
             
     def _get_system_prompt(self):
+        """Ajanın kimliğini ve kurallarını belirler."""
         return """
         Sen Uzman bir Türk Hukuku Asistanısın. Alanın: Apartman, Site ve Komşuluk Hukuku.
         
@@ -56,19 +57,25 @@ class LegalRAG:
 
     def generate_answer(self, user_query):
         """
-        TEK FONKSİYON: Soru -> Cevap + Kaynaklar
+        ANA AKIŞ (Main Flow)
+        --------------------
+        1. DÜŞÜNME (Planning): Soruyu analiz et, hangi kanuna ihtiyaç var?
+        2. ARAMA (Retrieval): Seçilen kanun kitabından ilgili maddeleri bul.
+        3. CEVAPLAMA (Generation): Bulunan maddeleri kullanarak cevabı yaz.
         """
+        
+        # 1. ADIM: İSTEM (Prompt) Hazırlığı
         messages = [
             {"role": "system", "content": self._get_system_prompt()},
             {"role": "user", "content": user_query}
         ]
         
-        # 1. LLM'e Sor (Hangi araca ihtiyacın var?)
+        # LLM'e araçları (tools) tanıtıyoruz
         response = self.client.chat.completions.create(
             model=config.LLM_MODEL,
             messages=messages,
             tools=self._get_openai_tools(),
-            tool_choice="auto"
+            tool_choice="auto" # Kararı yapay zekaya bırak
         )
         
         msg = response.choices[0].message
@@ -76,36 +83,40 @@ class LegalRAG:
         
         used_sources = [] 
         
-        # 2. Eğer LLM araç kullanmak istediyse (Genelde ister)
+        # 2. ADIM: ARAÇ KULLANIMI (Tool Execution)
         if tool_calls:
-            messages.append(msg) # Geçmişe ekle
+            # Yapay zeka "Şu kanuna bakmam lazım" dedi.
+            messages.append(msg) # Bu kararı hafızaya ekle
             
             for tool_call in tool_calls:
+                # Hangi fonksiyonu çağırdı? (Örn: search_kmk)
                 func_name = tool_call.function.name
                 args = json.loads(tool_call.function.arguments)
                 query = args.get("query")
                 
-                # Hangi kanun? (search_kmk -> kmk)
+                # Fonksiyon isminden kanun kodunu çıkar (search_kmk -> kmk)
                 doc_key = func_name.replace("search_", "")
                 
+                # İlgili Arama Motorunu (RAG Tool) getir
                 rag_tool = self.tools_map.get(doc_key)
+                
                 if rag_tool:
-                    # RAG Araması Yap
+                    # VERİTABANI ARAMASI YAP
                     context_list = rag_tool.get_context(query)
                     
                     if context_list:
-                        # Context'i birleştir
+                        # LLM için metinleri birleştir
                         context_str = "\n".join([item['content'] for item in context_list])
                         
-                        # Kaynak listesini hazırla (Sadece Başlık + İçerik)
+                        # Kullanıcıya göstermek için kaynakları listeye ekle
                         for item in context_list:
-                             # "KMK Madde X..." formatında basit string
+                            # Format: **Belge Adı** \n İçerik
                             source_simple = f"**{item['metadata']['doc_name']}**\n{item['content']}"
                             used_sources.append(source_simple)
                     else:
-                        context_str = "Veritabanında bilgi yok."
+                        context_str = "Veritabanında ilgili bilgi bulunamadı."
 
-                    # Sonucu LLM'e geri ver
+                    # 3. ADIM: ARAMA SONUCUNU YAPAY ZEKAYA GERİ VER
                     messages.append({
                         "tool_call_id": tool_call.id,
                         "role": "tool",
@@ -113,7 +124,7 @@ class LegalRAG:
                         "content": context_str
                     })
 
-            # 3. Final Cevabı Üret
+            # 4. ADIM: SON CEVABI ÜRET (Generation)
             final_response = self.client.chat.completions.create(
                 model=config.LLM_MODEL,
                 messages=messages
@@ -121,7 +132,7 @@ class LegalRAG:
             return final_response.choices[0].message.content, used_sources
         
         else:
-            # Araç kullanmadıysa (Selam, Nasılsın vb.)
+            # Araç kullanmadıysa (Selamlaşma vb.) direk cevap ver
             return msg.content, []
 
 

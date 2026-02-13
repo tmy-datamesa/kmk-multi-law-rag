@@ -3,11 +3,10 @@ from src import config, utils
 class LegalRAGTool:
 
     """
-    Tekil RAG Motoru 
-    
-    Bu sınıfın tek görevi:
-    Kendisine verilen ÖZEL bir koleksiyon (Örn: Sadece KMK veya Sadece TBK) içinde
-    arama yapmaktır. Agent bu aracı çağırır.
+    TEKİL ARAMA MOTORU (RETRIEVER)
+    ------------------------------
+    Bu sınıf, sadece kendine atanan BİR kanun kitabı içerisinde arama yapar.
+    Örneğin: "Sadece Kat Mülkiyeti Kanunu içinde 'çatı' kelimesini ara".
     """
     def __init__(self, collection_name, client=None):
         # Veritabanı bağlantısını ve Embedding fonksiyonunu al
