@@ -35,7 +35,16 @@ MLFLOW_EXPERIMENT_NAME = "legal-rag-v1"
 # Proje kök dizini ve veri klasörü
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA_DIR = os.path.join(BASE_DIR, "data")
-CHROMA_DB_PATH = os.path.join(DATA_DIR, "chroma_db")
+
+# Veritabanı Ayarları (Sadece Cloud Modu)
+# Yerel klasör desteği kaldırıldı. Mutlaka bir ChromaDB sunucusu (Docker veya Cloud) gereklidir.
+CHROMA_HOST = os.getenv("CHROMA_HOST") 
+CHROMA_PORT = os.getenv("CHROMA_PORT", "8000")
+CHROMA_API_KEY = os.getenv("CHROMA_API_KEY") 
+CHROMA_SSL = os.getenv("CHROMA_SSL", "False").lower() == "true" 
+
+if not CHROMA_HOST:
+    raise ValueError("HATA: .env dosyasında 'CHROMA_HOST' tanımlı değil! Cloud modu zorunludur.")
 
 # Kullanılabilir Hukuk Kaynakları
 # Yeni bir kanun eklemek için bu sözlüğe yeni bir kayıt ekleyin ve "make ingest" çalıştırın.
@@ -84,3 +93,4 @@ LEGAL_DOCS = {
 CHUNK_SIZE = 2000      # Metin parçalama boyutu (karakter)
 CHUNK_OVERLAP = 400    # Parçalar arası örtüşme (bağlam kaybını önlemek için)
 TOP_K = 6              # LLM'e gönderilecek en alakalı parça sayısı
+TEMPERATURE = 0.0      # Yaratıcılık katsayısı (0.0 = En tutarlı/Deterministik, 1.0 = En yaratıcı)

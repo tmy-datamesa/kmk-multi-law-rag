@@ -35,7 +35,7 @@ cd kmk-multi-law-rag
 make setup
 
 # 3. .env dosyasını ayarlayın
-# (OPENAI_API_KEY ve CHROMA_API_KEY gereklidir)
+# (OPENAI_API_KEY ve CHROMA_HOST zorunludur. Yerel veritabanı desteklenmemektedir.)
 
 # 4. Verileri yükleyin (PDF'ler taranır)
 make ingest

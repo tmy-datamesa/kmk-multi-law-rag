@@ -1,6 +1,7 @@
 import streamlit as st
 import time
 from src.agent import LegalRAG
+from src import config
 
 # ==============================================================================
 # 1. SAYFA AYARLARI (Page Config)
@@ -12,6 +13,34 @@ st.set_page_config(
 )
 st.title("⚖️ Komşuluk & Apartman Hukuku Asistanı")
 st.caption("Uzmanlık Alanı: Site Yönetimi, Komşuluk İlişkileri ve Apartman Sorunları (KMK Odaklı)")
+
+# ==============================================================================
+# 1.5. YAN MENÜ (Sidebar) - Teknik Bilgiler
+# ==============================================================================
+with st.sidebar:
+    st.header("🛠️ Teknik Detaylar")
+    st.caption("Bu ayarlar sabittir, sadece bilgi amaçlı gösterilmektedir.")
+    
+    st.markdown("### 🧠 Model Yapısı")
+    st.markdown(f"**LLM:** `{config.LLM_MODEL}`")
+    st.markdown(f"**Embedding:** `{config.EMBEDDING_MODEL}`")
+    st.markdown(f"**Vektör DB:** `ChromaDB` (Local)")
+    
+    st.divider()
+    
+    st.markdown("### ⚙️ Parametreler")
+    # Temperature'ı görselleştirmek için disabled slider kullanıyoruz
+    st.slider(
+        label="Yaratıcılık (Temperature)",
+        min_value=0.0, 
+        max_value=1.0, 
+        value=config.TEMPERATURE,
+        disabled=True, 
+        help="Modelin belirlenmiş yaratıcılık seviyesi (0.0 = Deterministik)"
+    )
+    
+    st.markdown(f"**Top-K:** `{config.TOP_K}` (Getirilen Parça Sayısı)")
+    st.markdown(f"**Chunk Size:** `{config.CHUNK_SIZE}` karakter")
 
 # ==============================================================================
 # 2. SİSTEM BAŞLATMA (Initialization)
@@ -69,9 +98,13 @@ if prompt := st.chat_input("Sorunuzu buraya yazın..."):
                 if kaynaklar:
                     with st.expander("📚 Başvurulan Kanun Maddeleri ve Kaynaklar"):
                         for i, doc in enumerate(kaynaklar):
-                            st.markdown(f"**Kaynak {i+1}**")
+                            # doc artık bir sözlük: {'mid': ..., 'content': ..., 'metadata': ...}
+                            source_name = doc['metadata']['doc_name']
+                            content = doc['content']
+                            
+                            st.markdown(f"**Kaynak {i+1}: {source_name}**")
                             # Çok uzun metinleri görsel açıdan kırp
-                            clean_doc = doc if len(doc) < 600 else doc[:600] + "..."
+                            clean_doc = content if len(content) < 600 else content[:600] + "..."
                             st.markdown(f"> {clean_doc}")
                             st.divider()
                 

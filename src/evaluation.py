@@ -42,9 +42,16 @@ def run_evaluation():
         # Cevap ve Kaynakları Al
         answer, sources = rag.generate_answer(item['question'])
         
+        # RAGAS DEĞERLENDİRMESİ İÇİN VERİ HAZIRLIĞI
+        # ------------------------------------------
+        # Ragas 'contexts' olarak sadece metin listesi (list[str]) bekler.
+        # agent.py artık sözlük listesi döndürüyor ({'content':..., 'metadata':...}).
+        # Bu yüzden sadece 'content' alanını çekiyoruz.
+        context_contents = [s['content'] for s in sources]
+        
         results["question"].append(item['question'])
         results["answer"].append(answer)
-        results["contexts"].append(sources)
+        results["contexts"].append(context_contents)
         # JSON'daki anahtar 'ground_truth_answer'
         results["ground_truth"].append(item.get('ground_truth_answer', ''))
 

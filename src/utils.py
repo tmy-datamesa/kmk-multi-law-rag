@@ -8,17 +8,31 @@ def get_chroma_client():
     """
     ChromaDB İstemcisini Getir
     --------------------------
-    Bu fonksiyon, vektör veritabanı ile bağlantıyı kurar.
+    Bu fonksiyon, UZAK (Cloud) vektör veritabanı ile bağlantıyı kurar.
+    Yerel veritabanı desteği kaldırılmıştır.
     
     Çıktı:
-        - chromadb.PersistentClient: Veritabanı istemcisi
+        - chromadb.HttpClient: Veritabanı istemcisi
     
     Not:
-        Tüm uygulama boyunca tek bir istemci kullanılması önerilir.
+        .env dosyasında CHROMA_HOST tanımlı olmalıdır.
     """
     try:
-        # Yerel veritabanı kullanılıyor (data/chroma_db)
-        return chromadb.PersistentClient(path=config.CHROMA_DB_PATH)
+        # Cloud ChromaDB Bağlantısı (Zorunlu)
+        settings = chromadb.config.Settings()
+        if config.CHROMA_API_KEY:
+            settings.chroma_client_auth_provider = "chromadb.auth.token_authn.TokenAuthClientProvider"
+            settings.chroma_client_auth_credentials = config.CHROMA_API_KEY
+        
+        client = chromadb.HttpClient(
+            host=config.CHROMA_HOST,
+            port=config.CHROMA_PORT,
+            ssl=config.CHROMA_SSL,
+            settings=settings
+        )
+        print(f"☁️ Cloud ChromaDB Bağlandı (ZORUNLU): {config.CHROMA_HOST}")
+        return client
+        
     except Exception as e:
         print(f"Veritabanı bağlantı hatası: {e}")
         raise e

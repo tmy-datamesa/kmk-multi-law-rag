@@ -115,7 +115,8 @@ class LegalRAG:
             mlflow.log_params({
                 "llm_model": config.LLM_MODEL,
                 "top_k": config.TOP_K,
-                "embedding_model": config.EMBEDDING_MODEL
+                "embedding_model": config.EMBEDDING_MODEL,
+                "temperature": config.TEMPERATURE
             })
             
             # --- 1. ADIM: Planlama ---
@@ -128,12 +129,13 @@ class LegalRAG:
                 model=config.LLM_MODEL,
                 messages=messages,
                 tools=self._get_openai_tools(),
-                tool_choice="auto"
+                tool_choice="auto",
+                temperature=config.TEMPERATURE
             )
             
             msg = response.choices[0].message
             tool_calls = msg.tool_calls
-            used_sources = []
+            used_sources = [] # Artık dict listesi olacak
             
             # --- 2. ADIM: Araç Kullanımı (Varsa) ---
             if tool_calls:
@@ -152,8 +154,10 @@ class LegalRAG:
                         if results:
                             # Context stringini oluştur (LLM için)
                             context_str = "\n".join([r['content'] for r in results])
-                            # Kullanıcıya gösterilecek kaynak listesini oluştur
-                            used_sources.extend([f"**{r['metadata']['doc_name']}**\n{r['content']}" for r in results])
+                            
+                            # Ham veriyi sakla (UI ve Eval için)
+                            # Her bir result zaten {'content': ..., 'metadata': ...} formatında
+                            used_sources.extend(results)
 
                     # Aracı çalıştır ve sonucunu mesaja ekle
                     messages.append({
@@ -166,7 +170,8 @@ class LegalRAG:
                 # --- 3. ADIM: Nihai Cevap ---
                 final_response = self.client.chat.completions.create(
                     model=config.LLM_MODEL,
-                    messages=messages
+                    messages=messages,
+                    temperature=config.TEMPERATURE
                 )
                 answer = final_response.choices[0].message.content
             else:
