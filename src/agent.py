@@ -29,7 +29,7 @@ class LegalRAG:
         mlflow.set_tracking_uri(config.MLFLOW_TRACKING_URI)
         mlflow.set_experiment(config.MLFLOW_EXPERIMENT_NAME)
         
-        # ARAÇLARI HAZIRLA (Her kanun için ayrı bir arama motoru)
+        # ARAÇLARI HAZIRLA (Her kanun için RAG motoru)
         self.tools_map = {}
         for key, info in config.LEGAL_DOCS.items():
             self.tools_map[key] = LegalRAGTool(info["collection"], self.chroma_client)
@@ -101,7 +101,8 @@ class LegalRAG:
         """
         # Her sorgu için bir MLflow Run başlat (Kullanım takibi için)
         # Not: Metin dosyaları (artifacts) yoğunluk yaratmaması için loglanmıyor, sadece parametreler takip ediliyor.
-        with mlflow.start_run():
+        run_name = user_query[:50] + "..." if len(user_query) > 50 else user_query
+        with mlflow.start_run(run_name=run_name):
             mlflow.log_params({
                 "llm_model": config.LLM_MODEL,
                 "top_k": config.TOP_K,
@@ -162,8 +163,5 @@ class LegalRAG:
             else:
                 # Araç çağırmadıysa doğrudan cevabı döndür
                 answer = msg.content
-            
-            # Not: Artifact loglama (txt dosyaları) kullanıcı isteği üzerine kaldırıldı.
-            # Sadece parametreler ve metrikler loglanıyor.
                 
             return answer, used_sources
