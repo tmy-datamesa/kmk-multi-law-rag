@@ -1,15 +1,26 @@
 from src import config, utils
 
 class LegalRAGTool:
-
     """
     TEKİL ARAMA MOTORU (RETRIEVER)
     ------------------------------
-    Bu sınıf, sadece kendine atanan BİR kanun kitabı içerisinde arama yapar.
-    Örneğin: "Sadece Kat Mülkiyeti Kanunu içinde 'çatı' kelimesini ara".
+    Bu sınıf, belirli bir hukuk kaynağı (kanun, yönetmelik vb.) içerisinde
+    vektör tabanlı arama yapmaktan sorumludur.
+    
+    Kullanım Amacı:
+    - Verilen soruyu (query) alır.
+    - İlgili ChromaDB koleksiyonunda en yakın eşleşmeleri bulur.
+    - Bulunan içerikleri LLM'in anlayacağı formata çevirir.
     """
+    
     def __init__(self, collection_name, client=None):
-        # Veritabanı bağlantısını ve Embedding fonksiyonunu al
+        """
+        Araç ilklendirme.
+        
+        Girdi:
+        - collection_name: Aranacak kanunun ChromaDB'deki koleksiyon adı (örn: "law_kmk")
+        - client: (Opsiyonel) Var olan bir ChromaDB istemcisi. Yoksa yenisini oluşturur.
+        """
         self.client = client or utils.get_chroma_client()
         self.embedding_fn = utils.get_embedding_function()
         
@@ -21,7 +32,17 @@ class LegalRAGTool:
 
     def retrieve(self, query):
         """
-        Vektör Araması: Soruyu sayıya çevir ve en yakın 4 maddeyi bul.
+        Vektör Araması Yapar.
+        
+        Ne Yapar:
+        1. Soruyu embedding (sayı vektörü) haline getirir.
+        2. Koleksiyondaki en yakın `config.TOP_K` adet parçayı bulur.
+        
+        Girdi:
+        - query (str): Kullanıcı sorusu veya arama metni.
+        
+        Çıktı:
+        - list: Bulunan dokümanların içerik ve metadatalarını içeren sözlük listesi.
         """
         results = self.collection.query(
             query_texts=[query],
@@ -44,8 +65,7 @@ class LegalRAGTool:
 
     def get_context(self, query):
         """
-        LLM için hazırlık: Bulunan maddeleri ve metadataları döner.
+        Ajan (Agent) tarafından kullanılan standart arayüz.
+        Doğrudan retrieve fonksiyonunu çağırır.
         """
         return self.retrieve(query)
-
-

@@ -1,39 +1,55 @@
 import os
 from dotenv import load_dotenv
 
-# .env dosyasını yükle
+# .env dosyasını yükle (API anahtarları için)
 load_dotenv()
 
+"""
+KONFİGÜRASYON (AYARLAR)
+-----------------------
+Bu dosya projenin tüm ayarlarını tek bir merkezde toplar.
+Mümkün olduğunca sabit değerleri (hardcoded strings) burada tutmaya çalışın.
+"""
+
 # ==============================================================================
-# API VE İSTEMCİ AYARLARI
+# 1. API VE İSTEMCİ AYARLARI
 # ==============================================================================
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-CHROMA_API_KEY = os.getenv("CHROMA_API_KEY")
 
 # ==============================================================================
-# MODEL AYARLARI
+# 2. MODEL AYARLARI
 # ==============================================================================
-LLM_MODEL = "gpt-4o-mini"
-EMBEDDING_MODEL = "text-embedding-3-small"
+LLM_MODEL = "gpt-4o-mini" # Maliyet/Performans için optimize model
+EMBEDDING_MODEL = "text-embedding-3-small" # Vektörleştirme modeli
 
 # ==============================================================================
-# BİLGİ BANKASI (BELGELER)
+# 3. MLOPS (TAKİP VE LOGLAMA)
 # ==============================================================================
-# Ajanın erişebileceği hukuk kaynakları burada tanımlanır.
-# Yeni bir kanun eklemek için buraya yeni bir blok eklemeniz yeterlidir.
-DATA_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data")
+# Yerel bir SQLite veritabanı kullanılır.
+MLFLOW_TRACKING_URI = "sqlite:///mlflow.db"
+MLFLOW_EXPERIMENT_NAME = "legal-rag-v1"
 
+# ==============================================================================
+# 4. HUKUK KAYNAKLARI (VERİ)
+# ==============================================================================
+# Proje kök dizini ve veri klasörü
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+DATA_DIR = os.path.join(BASE_DIR, "data")
+CHROMA_DB_PATH = os.path.join(DATA_DIR, "chroma_db")
+
+# Kullanılabilir Hukuk Kaynakları
+# Yeni bir kanun eklemek için bu sözlüğe yeni bir kayıt ekleyin ve "make ingest" çalıştırın.
 LEGAL_DOCS = {
     "kmk": {
         "name": "Kat Mülkiyeti Kanunu",
-        "description": "Apartman, site yönetimi, aidat, komşuluk ilişkileri ve kat malikleri kurulu hakkında sorular.",
+        "description": "Apartman, site yönetimi, aidat, komşuluk ilişkileri, gürültü, koku, yasak işler (randevu evi, klinik vb.), kapıcı ve kat malikleri kurulu hakkında sorular.",
         "path": os.path.join(DATA_DIR, "kat-mulkiyeti.pdf"),
         "collection": "law_kmk"
     },
     "tbk": {
         "name": "Türk Borçlar Kanunu (İlgili Maddeler)",
         "description": "Sadece kira sözleşmeleri, kiracı-ev sahibi ilişkileri ve komşuluktan doğan zararlar.",
-        "path": os.path.join(DATA_DIR, "borclar-kanunu.pdf"), # Dosya yoksa ingest sırasında uyarır
+        "path": os.path.join(DATA_DIR, "borclar-kanunu.pdf"),
         "collection": "law_tbk"
     },
     "anayasa": {
@@ -44,7 +60,7 @@ LEGAL_DOCS = {
     },
     "tmk": {
         "name": "Türk Medeni Kanunu (İlgili Maddeler)",
-        "description": "Komşuluk hakları, mülkiyet kısıtlamaları, taşkınlık ve irtifak hakları.",
+        "description": "Genel mülkiyet hakları, taşınmaz mülkiyeti ve komşuluk hakları. (Apartman veya site dışındaki, müstakil yapılar veya genel hükümler için kullan).",
         "path": os.path.join(DATA_DIR, "medeni_kanun.pdf"),
         "collection": "law_tmk"
     },
@@ -62,10 +78,9 @@ LEGAL_DOCS = {
     }
 }
 
-
-
-# RAG Parametreleri (Varsayılan)
-CHUNK_SIZE = 2000      # v2 ile aynı tutuldu
-CHUNK_OVERLAP = 400    # v2 ile aynı tutuldu
-TOP_K = 4
-
+# ==============================================================================
+# 5. RAG PARAMETRELERİ
+# ==============================================================================
+CHUNK_SIZE = 2000      # Metin parçalama boyutu (karakter)
+CHUNK_OVERLAP = 400    # Parçalar arası örtüşme (bağlam kaybını önlemek için)
+TOP_K = 6              # LLM'e gönderilecek en alakalı parça sayısı

@@ -44,3 +44,31 @@ make ingest
 make run
 ```
 
+## 🧹 Temizlik ve Bakım
+
+Projede biriken logları veya önbellek dosyalarını temizlemek için:
+
+```bash
+# Önbellek dosyalarını (__pycache__) temizler
+make clean
+
+# MLflow loglarını ve veritabanını sıfırlar (DİKKAT: Eski test sonuçları silinir)
+make clean-logs
+```
+
+## 📊 Değerlendirme (Evaluation)
+Projenin performansını **RAGAS** ve **MLflow** ile ölçmek için:
+
+1. Değerlendirme scriptini çalıştırın:
+```bash
+make eval
+```
+2. Sonuçları MLflow arayüzünde görüntüleyin:
+```bash
+mlflow ui
+```
+Tarayıcınızda `http://127.0.0.1:5000` adresine gidin. Burada:
+- Her bir denemeyi (Run) görebilir,
+- "Faithfulness" ve "Answer Relevancy" skorlarını karşılaştırabilir,
+- Hangi modelin veya parametrenin (Chunk Size, Top K) daha iyi sonuç verdiğini analiz edebilirsiniz.
+

@@ -11,21 +11,14 @@ def get_chroma_client():
     Bu fonksiyon, vektör veritabanı ile bağlantıyı kurar.
     
     Çıktı:
-        - chromadb.CloudClient: Veritabanı istemcisi
+        - chromadb.PersistentClient: Veritabanı istemcisi
     
     Not:
         Tüm uygulama boyunca tek bir istemci kullanılması önerilir.
     """
-    if not config.CHROMA_API_KEY:
-        raise ValueError("HATA: .env dosyasında CHROMA_API_KEY eksik! Lütfen kontrol edin.")
-
     try:
-        # Cloud sürümü kullanılıyor
-        return chromadb.CloudClient(
-            api_key=config.CHROMA_API_KEY,
-            tenant=os.getenv("CHROMA_TENANT", "default_tenant"),
-            database=os.getenv("CHROMA_DATABASE", "default_database")
-        )
+        # Yerel veritabanı kullanılıyor (data/chroma_db)
+        return chromadb.PersistentClient(path=config.CHROMA_DB_PATH)
     except Exception as e:
         print(f"Veritabanı bağlantı hatası: {e}")
         raise e
