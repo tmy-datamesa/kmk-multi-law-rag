@@ -15,32 +15,33 @@ st.title("⚖️ Komşuluk & Apartman Hukuku Asistanı")
 st.caption("Uzmanlık Alanı: Site Yönetimi, Komşuluk İlişkileri ve Apartman Sorunları (KMK Odaklı)")
 
 # ==============================================================================
-# 1.5. YAN MENÜ (Sidebar) - Teknik Bilgiler
+# 1.5. YAN MENÜ (Sidebar) - Proje Bilgisi & Teknik Detaylar
 # ==============================================================================
 with st.sidebar:
-    st.header("🛠️ Teknik Detaylar")
+    st.header("� Proje Hakkında")
+    st.markdown(
+        """
+        <small>Bu asistan, **Kat Mülkiyeti Kanunu (KMK)** başta olmak üzere, 
+        apartman ve site yönetimiyle ilgili hukuki soruları yanıtlamak için geliştirilmiştir.
+        
+        **Kapsam:**
+        - Site Yönetimi
+        - Aidat & Gider Paylaşımı
+        - Komşuluk Hakları
+        </small>
+        """, 
+        unsafe_allow_html=True
+    )
+    
+    st.divider()
+    
+    st.header("Teknik Detaylar")
     st.caption("Bu ayarlar sabittir, sadece bilgi amaçlı gösterilmektedir.")
     
     st.markdown("### 🧠 Model Yapısı")
     st.markdown(f"**LLM:** `{config.LLM_MODEL}`")
     st.markdown(f"**Embedding:** `{config.EMBEDDING_MODEL}`")
-    st.markdown(f"**Vektör DB:** `ChromaDB` (Local)")
-    
-    st.divider()
-    
-    st.markdown("### ⚙️ Parametreler")
-    # Temperature'ı görselleştirmek için disabled slider kullanıyoruz
-    st.slider(
-        label="Yaratıcılık (Temperature)",
-        min_value=0.0, 
-        max_value=1.0, 
-        value=config.TEMPERATURE,
-        disabled=True, 
-        help="Modelin belirlenmiş yaratıcılık seviyesi (0.0 = Deterministik)"
-    )
-    
-    st.markdown(f"**Top-K:** `{config.TOP_K}` (Getirilen Parça Sayısı)")
-    st.markdown(f"**Chunk Size:** `{config.CHUNK_SIZE}` karakter")
+    st.markdown(f"**Vektör DB:** `ChromaDB (Cloud)`")
 
 # ==============================================================================
 # 2. SİSTEM BAŞLATMA (Initialization)

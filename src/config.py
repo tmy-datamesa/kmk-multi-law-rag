@@ -42,6 +42,8 @@ CHROMA_HOST = os.getenv("CHROMA_HOST")
 CHROMA_PORT = os.getenv("CHROMA_PORT", "8000")
 CHROMA_API_KEY = os.getenv("CHROMA_API_KEY") 
 CHROMA_SSL = os.getenv("CHROMA_SSL", "False").lower() == "true" 
+CHROMA_TENANT = os.getenv("CHROMA_TENANT", "default_tenant")
+CHROMA_DATABASE = os.getenv("CHROMA_DATABASE", "default_database")
 
 if not CHROMA_HOST:
     raise ValueError("HATA: .env dosyasında 'CHROMA_HOST' tanımlı değil! Cloud modu zorunludur.")

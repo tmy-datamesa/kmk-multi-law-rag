@@ -72,3 +72,5 @@ Tarayıcınızda `http://127.0.0.1:5000` adresine gidin. Burada:
 - "Faithfulness" ve "Answer Relevancy" skorlarını karşılaştırabilir,
 - Hangi modelin veya parametrenin (Chunk Size, Top K) daha iyi sonuç verdiğini analiz edebilirsiniz.
 
+
+

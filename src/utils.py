@@ -20,17 +20,22 @@ def get_chroma_client():
     try:
         # Cloud ChromaDB Bağlantısı (Zorunlu)
         settings = chromadb.config.Settings()
+        
+        # Auth Provider YERİNE Header kullanıyoruz (api.trychroma.com için)
+        headers = {}
         if config.CHROMA_API_KEY:
-            settings.chroma_client_auth_provider = "chromadb.auth.token_authn.TokenAuthClientProvider"
-            settings.chroma_client_auth_credentials = config.CHROMA_API_KEY
+            headers["x-chroma-token"] = config.CHROMA_API_KEY
         
         client = chromadb.HttpClient(
             host=config.CHROMA_HOST,
             port=config.CHROMA_PORT,
             ssl=config.CHROMA_SSL,
+            tenant=config.CHROMA_TENANT,
+            database=config.CHROMA_DATABASE,
+            headers=headers,
             settings=settings
         )
-        print(f"☁️ Cloud ChromaDB Bağlandı (ZORUNLU): {config.CHROMA_HOST}")
+        print(f"☁️ Cloud ChromaDB Bağlandı (ZORUNLU): {config.CHROMA_HOST} | Tenant: {config.CHROMA_TENANT} | DB: {config.CHROMA_DATABASE}")
         return client
         
     except Exception as e:
