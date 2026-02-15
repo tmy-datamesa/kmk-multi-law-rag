@@ -1,15 +1,15 @@
-# 🤖 Multi-Law Agentic RAG (V2)
+# 🏛️ Multi-Law Legal Agent (Hukuk Asistanı)
 
 Bu proje, tek bir kanun yerine **birden fazla hukuk kaynağını (KMK, TBK, Anayasa vb.)** yönetebilen, "Ajan (Agent)" tabanlı bir yapay zeka sistemidir.
 
 ## 🌟 Nedir Farkı? (V1 vs V2)
 
-*   **V2 (Eski):** Sadece Kat Mülkiyeti Kanunu'nu bilen, "tek fonksiyonlu" bir araçtı.
-*   **V3 (Yeni):** Akıllı bir **Yönlendirici (Router)** içerir. Sorunuza bakar, hangi kanunun uzmanlık alanına girdiğine karar verir ve o kanunu açıp okur.
+*   **V1 (Eski):** Sadece Kat Mülkiyeti Kanunu'nu bilen, "tek fonksiyonlu" bir araçtı.
+*   **V2 (Yeni):** Akıllı bir **Yönlendirici (Router)** içerir. Sorunuza bakar, hangi kanunun uzmanlık alanına girdiğine karar verir. **Ancak dikkat:** Sistem sadece **Apartman, Site ve Komşuluk Hukuku** bağlamında çalışır.
 
 Örneğin:
-*   *"Aidat ödemezsem ne olur?"* -> **Otomatik olarak KMK (Kat Mülkiyeti)** kitabını açar.
-*   *"Kiracı depozitosu iade edilmedi"* -> **Otomatik olarak TBK (Borçlar Kanunu)** kitabını açar.
+*   *"Aidat ödemezsem ne olur?"* -> **KMK (Kat Mülkiyeti)**
+*   *"Kiracı depozitosu iade edilmedi"* -> **TBK (Borçlar Kanunu)** *(Sadece konut kiraları bağlamında)*
 
 ## 📂 Mimari (Agentic RAG)
 
