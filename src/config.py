@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 """
-KONFİGÜRASYON (AYARLAR)
+KONFİGÜRASYON
 -----------------------
 Bu dosya projenin tüm ayarlarını tek bir merkezde toplar.
 Mümkün olduğunca sabit değerleri (hardcoded strings) burada tutmaya çalışın.

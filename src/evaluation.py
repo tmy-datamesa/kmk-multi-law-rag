@@ -8,7 +8,7 @@ from src.agent import LegalRAG
 from src import config
 
 # Basit bir test veri seti (Sorular ve Beklenen Cevaplar)
-# Gerçek projede bu veriler harici bir dosyadan (JSON/CSV) okunmalıdır.
+# bu veriler harici bir dosyadan (JSON/CSV) okunmalıdır.
 import json
 import os
 
